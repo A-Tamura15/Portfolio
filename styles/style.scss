@@ -1,0 +1,619 @@
+/*-----------------------
+common
+-----------------------*/
+$cWhite: #fff;
+$cDarkBrown: #402717;
+$cLightBrown: #f6efdb;
+$cGray: #a5a5a5;
+
+$breakpoints: (
+  "sp": "(max-width: 767px)",
+  "tab": "(min-width: 768px) and (max-width: 1199px)",
+  "pc": "(min-width: 1200px)",
+) !default;
+
+// メディアクエリー
+@mixin mq($breakpoint: sp) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
+body {
+  background-color: $cWhite;
+  color: $cDarkBrown;
+  font-family: "Savoye LET", "游ゴシック体", 'Yu Gothic', sans-serif;
+  font-size: 16px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+ul {
+  list-style: none;
+}
+
+.container {
+  padding: 0 10%;
+}
+
+section {
+  margin-bottom: 60px;
+}
+
+.sub_title {
+  color: $cGray;
+  font-size: 100px;
+  font-weight: normal;
+  position: relative;
+
+  &::before {
+    content: "";
+    width: 60px;
+    height: 4px;
+    display: inline-block;
+    background-color: #a5a5a5;
+    position: absolute;
+    bottom: 30px;
+  }
+}
+
+@mixin animation(
+  $name,
+  $duration: 1s,
+  $timing-function: ease,
+  $delay: 0s,
+  $iteration-count: 1,
+  $direction: normal,
+  $fill-mode: forwards
+) {
+  animation: {
+    name: $name;
+    duration: $duration;
+    timing-function: $timing-function;
+    delay: $delay;
+    iteration-count: $iteration-count;
+    direction: $direction;
+    fill-mode: $fill-mode;
+  }
+}
+
+$pattern: (
+  "up": translateY(20px),
+  "down": translateY(-20px),
+  "left": translateX(40px),
+  "right": translateX(-40px),
+);
+
+@each $key, $value in $pattern {
+  .appear.#{$key} {
+    & .item {
+      transform: $value;
+    }
+  }
+}
+
+.appear {
+  & .item {
+    transition: all 1s;
+    opacity: 0;
+  }
+  &.inview {
+    & .item {
+      opacity: 1;
+      transform: none;
+
+      @for $i from 1 through 10 {
+        &:nth-child(#{$i}) {
+          transition-delay: $i * 0.1s;
+        }
+      }
+    }
+  }
+}
+
+/*-----------------------
+header
+-----------------------*/
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  height: 80px;
+  padding: 0px 1%;
+
+  &_contents {
+    width: 40%;
+    line-height: 90px;
+  }
+
+  ul {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &_menu {
+    font-size: 40px;
+    li {
+      width: calc((100% - 30px) / 3);
+    }
+
+    .icon__github {
+      width: 30px;
+      padding-right: 10px;
+      img {
+        width: 30px;
+        padding-top: 25px;
+      }
+    }
+
+    @include mq('sp') {
+      display: none !important;
+    }
+  }
+}
+
+.logo {
+  padding-top: 10px;
+  width: 60%;
+  &_img {
+    width: 60px;
+    height: 60px;
+
+    &:hover {
+      cursor: pointer;
+      opacity: 0.7 !important;
+    }
+  }
+}
+
+.hamburger {
+  display: none;
+  position: fixed;
+  z-index: 3;
+  right: 2%;
+  top: 17px;
+  width: 42px;
+  height: 42px;
+  cursor: pointer;
+  text-align: center;
+
+  @include mq('sp') {
+    display: block;
+  }
+
+  span {
+    display: block;
+    position: absolute;
+    width: 30px;
+    height: 2px;
+    left: 6px;
+    background-color: $cDarkBrown;
+    transition: 0.5s ease-in-out;
+
+    &:nth-child(1) {
+      top: 10px;
+    }
+    &:nth-child(2) {
+      top: 20px;
+    }
+    &:nth-child(3) {
+      top: 30px;
+    }
+  }
+
+  &.active span:nth-child(1) {
+    left: 6px;
+    transform: rotate(315deg);
+  }
+
+  &.active span {
+    top: 16px;
+    transform: rotate(-315deg);
+  }
+
+  &_menu {
+    position: absolute;
+    z-index: 2;
+    top: 80px;
+    color: $cDarkBrown;
+    background-color: rgba(255, 255, 255, 0.75);
+    text-align: center;
+    transform: translateX(200%);
+    transition: all 0.6s;
+    width: 50%;
+    height: 100vh;
+    font-size: 30px;
+
+    @include mq('tab') {
+      display: none;
+    }
+    @include mq('pc') {
+      display: none;
+    }
+
+    &.active {
+      transform: translateX(100%);
+    }
+
+    .icon__github img {
+      width: 30px;
+    }
+
+    ul {
+      margin: 0 auto;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+
+      li a {
+        display: block;
+        padding: 1em 0;
+        transition: all 0.6s ease;
+
+        &:hover {
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+}
+
+/*-----------------------
+top
+-----------------------*/
+#top {
+  position: relative;
+  text-align: center;
+  height: 100vh;
+  width: 100%;
+  background-image: url("../images/top.jpg");
+  background-size: cover;
+
+  h1 {
+    font-weight: normal;
+    font-size: 100px;
+  }
+}
+
+.top__text {
+  position: absolute;
+  top: calc(50% + 80px);
+  left: 0;
+  text-align: center;
+  transform: translateY(-50%);
+  width: 100%;
+}
+
+.lead {
+  font-size: 45px;
+}
+
+/*-----------------------
+works
+-----------------------*/
+.works {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.work {
+  &_box {
+    width: 48%;
+    display: block;
+    @include mq('pc') {
+      &:nth-child(n + 3) {
+        margin-top: 50px;
+      }
+    }
+    @include mq('tab') {
+      &:nth-child(n + 3) {
+        margin-top: 50px;
+      }
+    }
+
+    @include mq('sp') {
+      width: 100%;
+      &:not(:first-child) {
+        margin-top: 50px;
+      }
+    }
+
+    &_img {
+      display: block;
+      position: relative;
+      overflow: hidden;
+      height: 92%;
+      box-shadow: 4px 4px 14px $cGray;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      transition: all 0.6s ease;
+      display: block;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+  &_text {
+    display: block;
+    padding-top: 10px;
+    position: relative;
+    font-family: 游ゴシック体, 'Yu Gothic';
+  }
+}
+
+/*-----------------------
+about
+-----------------------*/
+.about_content {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+
+  &_pic {
+    position: relative;
+
+    @include mq('sp') {
+      text-align: center;
+    }
+
+    @include mq('tab') {
+      margin-bottom: 20px;
+    }
+    & img {
+      width: 50%;
+      border-radius: 30px;
+      @include mq('tab') {
+        width: 50%;
+      }
+      @include mq('sp') {
+        width: 80%;
+      }
+    }
+  }
+  &_info {
+    position: absolute;
+    padding: 20px;
+    left: 28%;
+    bottom: 0;
+    background-color: #fff;
+    border: solid 1px #402717;
+    border-radius: 30px;
+    font-family: 游ゴシック体, 'Yu Gothic';
+    margin-bottom: 20px;
+    @include mq('tab') {
+      margin-top: 10px;
+      position: relative;
+      top: 0;
+      left: 0;
+    }
+    @include mq('sp') {
+      margin-top: 10px;
+      position: relative;
+      top: 0;
+      left: 0;
+    }
+
+    &_title {
+      position: relative;
+      font-size: 30px;
+      margin-bottom: 20px;
+
+      @include mq('tab') {
+        font-size: 22px;
+      }
+
+      @include mq('sp') {
+        font-size: 22px;
+      }
+
+      &::before {
+        content: "";
+        width: 30px;
+        height: 2px;
+        display: inline-block;
+        background-color: #402717;
+        position: absolute;
+        bottom: 0;
+
+        @include mq('tab') {
+          width: 20px;
+        }
+        @include mq('sp') {
+          width: 20px;
+        }
+      }
+    }
+
+    &_text {
+      font-size: 16px;
+    }
+
+    &_skills {
+      font-size: 16px;
+      margin-top: 14px;
+    }
+  }
+}
+
+/*-----------------------
+contact
+-----------------------*/
+.contact_text {
+  margin-bottom: 15px;
+}
+
+.contact_mail {
+  font-size: 40px;
+}
+
+/*-----------------------
+footer
+-----------------------*/
+.footer {
+  background-color: $cGray;
+  color: $cWhite;
+  text-align: center;
+  padding: 10px 0;
+}
+
+/*------------------
+ modal window
+-------------------*/
+.modal-contact {
+  position: fixed;
+  z-index: 201;
+  max-width: calc(100% - 24px * 2);
+  width: 900px;
+  max-height: calc(100% - 24px * 2);
+  height: 652px;
+  background: $cWhite;
+  box-shadow: 0 0 3px rgba(#000, 0.16);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px 30px;
+  display: none;
+  font-family: "游ゴシック体", 'Yu Gothic', sans-serif;
+
+  &__img {
+    position: relative;
+    text-align: center;
+
+    img {
+      box-shadow: 4px 4px 14px $cGray;
+      width: 300px;
+
+      @include mq('sp') {
+        width: 60%;
+      }
+    }
+  }
+
+  &__head {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+
+    @include mq('sp') {
+      font-size: 18px;
+    }
+
+    a {
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    a::before {
+      content: "";
+      width: 16px;
+      height: 16px;
+      background: center no-repeat url(../images/open-window.png);
+      position: absolute;
+      right: -15%;
+      bottom: 0%;
+      transform: translateY(-50%);
+    }
+
+    a::after {
+      content: "";
+      width: 100px;
+      height: 2px;
+      background: $cGray;
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+    }
+  }
+
+  &__content {
+    margin-top: 20px;
+    height: calc(100% - 311px);
+    overflow: auto;
+
+    > :first-child {
+      margin-top: 0;
+    }
+  }
+
+  &__site-skill {
+    position: relative;
+    margin-top: 20px;
+  }
+
+  &__sub-head {
+    font-size: 20px;
+    font-weight: bold;
+    padding-left: 20px;
+    position: relative;
+    margin-top: 20px;
+
+    &::before {
+      content: '';
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 20px;
+      background: $cGray;
+      position: absolute;
+    }
+  }
+
+  &__text {
+    margin-top: 10px;
+    line-height: calc(24 / 16);
+    margin-left: 20px;
+  }
+
+  &__icon {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    right: 10px;
+    top: 10px;
+
+    a {
+      text-decoration: none;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  &-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(#000, 0.3);
+    z-index: 200;
+    display: none;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
