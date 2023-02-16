@@ -5,7 +5,7 @@ common
 body {
   background-color: #fff;
   color: #402717;
-  font-family: "Savoye LET", "游ゴシック体", "Yu Gothic", sans-serif;
+  font-family: "Cormorant Garamond", "游ゴシック体", "Yu Gothic", sans-serif;
   font-size: 16px;
 }
 
@@ -43,7 +43,7 @@ section {
   display: inline-block;
   background-color: #a5a5a5;
   position: absolute;
-  bottom: 30px;
+  bottom: 15px;
 }
 
 .appear.up .item {
@@ -120,14 +120,14 @@ header {
 }
 .header_contents {
   width: 40%;
-  line-height: 90px;
+  line-height: 80px;
 }
 .header ul {
   display: flex;
   justify-content: space-between;
 }
 .header_menu {
-  font-size: 40px;
+  font-size: 30px;
 }
 .header_menu li {
   width: calc((100% - 30px) / 3);
